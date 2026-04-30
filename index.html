@@ -3,47 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TKING - Crédito Rápido</title>
-    <meta property="og:title" content="TKING - Solicitá tu Crédito Rápido y Fácil">
+    <title>Isidro Cabrera · Asesoría de Crédito</title>
+    <meta property="og:title" content="Isidro Cabrera · Asesoría de Crédito">
     <meta property="og:description" content="Evaluación gratuita en 2 minutos. Todos los perfiles. Sin compromiso.">
     <meta property="og:image" content="https://isidrocabrera2016-ui.github.io/simulador-online/1000318336.png">
     <meta property="og:url" content="https://tking-asesor.github.io/tk/">
     <meta property="og:type" content="website">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta property="og:locale" content="es_PY">
     <style>
+        :root {
+            --bg-deep: #0B0F19; --accent-gold: #2ECC71; --white: #ffffff;
+            --whatsapp: #25D366;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
-            background: #0a2540;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            font-family: sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg-deep);
+            min-height: 100vh; padding: 15px;
+            display: flex; justify-content: center; align-items: center;
         }
-        img {
-            max-width: 300px;
-            width: 80%;
-            height: auto;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 24px;
-        }
-        .btn {
-            background: #25D366;
+        .card {
+            background: rgba(255,255,255,0.02); border-radius: 25px; padding: 30px 20px;
+            max-width: 450px; width: 100%; text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08);
             color: white;
-            padding: 16px 32px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
-            text-decoration: none;
         }
-        .btn:active { opacity: 0.8; }
+        .logo { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
+        .logo span { color: var(--accent-gold); }
+        .subtitle { font-size: 12px; opacity: 0.8; margin-bottom: 25px; }
+        h2 { font-size: 16px; margin-bottom: 20px; font-weight: 600; }
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
+        .btn {
+            padding: 14px 24px; border-radius: 12px; font-size: 15px; font-weight: 700;
+            cursor: pointer; border: none; transition: 0.2s;
+        }
+        .btn-si { background: #25D366; color: white; }
+        .btn-no { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.2); }
+        .btn-credito {
+            background: var(--whatsapp); color: white; padding: 16px 32px;
+            font-size: 18px; text-decoration: none; display: inline-block;
+            border-radius: 50px; animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .declaracion-box {
+            background: rgba(46, 204, 113, 0.05); border: 1px solid rgba(46, 204, 113, 0.3);
+            border-radius: 12px; padding: 18px; margin-bottom: 20px; text-align: left;
+            font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5;
+        }
+        .declaracion-box label {
+            display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
+            font-size: 12px; margin-top: 15px; color: rgba(255,255,255,0.7);
+        }
+        .declaracion-box input[type="checkbox"] {
+            width: 20px; height: 20px; accent-color: var(--accent-gold); flex-shrink: 0; margin-top: 2px;
+        }
+        .oculto { display: none; }
+        .msg-final { font-size: 14px; opacity: 0.8; margin-top: 20px; }
+        .btn-continuar {
+            background: rgba(46, 204, 113, 0.15); color: var(--accent-gold);
+            border: 1px solid rgba(46, 204, 113, 0.3); padding: 14px 24px;
+            border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;
+            margin-top: 15px; width: 100%;
+        }
+        .btn-continuar:disabled { opacity: 0.4; cursor: not-allowed; }
     </style>
 </head>
 <body>
-    <img src="https://isidrocabrera2016-ui.github.io/simulador-online/1000318336.png" alt="TKING">
-    <a href="https://isidrocabrera2016-ui.github.io/simulador-online/" class="btn">💰 QUIERO MI CRÉDITO</a>
+
+    <div class="card" id="pregunta1Container">
+        <div class="logo">ISIDRO <span>CABRERA</span></div>
+        <div class="subtitle">Asesoría de Crédito</div>
+        <h2>¿Tenés deudas o sanciones pendientes en Informconf?</h2>
+        <div class="btn-group">
+            <button class="btn btn-si" onclick="respuestaP1('si')">SÍ, TENGO</button>
+            <button class="btn btn-no" onclick="respuestaP1('no')">NO, ESTOY LIMPIO</button>
+        </div>
+    </div>
+
+    <div class="card oculto" id="pregunta2Container">
+        <h2>📝 Declaración Jurada</h2>
+        <div class="declaracion-box">
+            <p>Declaro bajo fe de juramento que no mantengo operaciones morosas con entidades comerciales ni financieras, ni poseo carteras de crédito vendidas (CARSA, NEXO, GECO, SIGESA, etc.).</p>
+            <label>
+                <input type="checkbox" id="declaracionCheck">
+                <span>Entiendo y acepto esta declaración. Deseo continuar.</span>
+            </label>
+        </div>
+        <button class="btn-continuar" id="btnDeclaracion" disabled onclick="confirmarDeclaracion()">CONFIRMO MI DECLARACIÓN</button>
+    </div>
+
+    <div class="card oculto" id="pregunta3Container">
+        <h2>¿Contás con un local físico o lugar de trabajo verificable?</h2>
+        <div class="btn-group">
+            <button class="btn btn-si" onclick="respuestaP3('si')">SÍ, CUENTO CON LUGAR VERIFICABLE</button>
+            <button class="btn btn-no" onclick="respuestaP3('no')">NO, NO CUENTO</button>
+        </div>
+    </div>
+
+    <div class="card oculto" id="finalExitoso">
+        <h2>✅ ¡Cumplís con los requisitos básicos!</h2>
+        <p style="margin-bottom:25px; opacity:0.8;">Accedé al simulador gratuito para conocer tu cuota y evaluar tu caso.</p>
+        <a href="https://isidrocabrera2016-ui.github.io/simulador-online/?v=2.0" class="btn-credito">💰 QUIERO MI CRÉDITO</a>
+    </div>
+
+    <div class="card oculto" id="finalNoCumple">
+        <h2>😔 Gracias por tu interés</h2>
+        <p class="msg-final">Lamentablemente, no cumplís con los requisitos mínimos en este momento. Cuando tu situación cambie, volvé a intentarlo.</p>
+    </div>
+
+    <script>
+        const declCheck = document.getElementById('declaracionCheck');
+        const btnDeclaracion = document.getElementById('btnDeclaracion');
+
+        declCheck.addEventListener('change', function() {
+            btnDeclaracion.disabled = !this.checked;
+        });
+
+        function respuestaP1(respuesta) {
+            document.getElementById('pregunta1Container').classList.add('oculto');
+            if (respuesta === 'si') {
+                document.getElementById('finalNoCumple').classList.remove('oculto');
+            } else {
+                document.getElementById('pregunta2Container').classList.remove('oculto');
+            }
+        }
+
+        function confirmarDeclaracion() {
+            if (!declCheck.checked) return;
+            document.getElementById('pregunta2Container').classList.add('oculto');
+            document.getElementById('pregunta3Container').classList.remove('oculto');
+        }
+
+        function respuestaP3(respuesta) {
+            document.getElementById('pregunta3Container').classList.add('oculto');
+            if (respuesta === 'si') {
+                document.getElementById('finalExitoso').classList.remove('oculto');
+            } else {
+                document.getElementById('finalNoCumple').classList.remove('oculto');
+            }
+        }
+    </script>
 </body>
 </html>
