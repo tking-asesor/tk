@@ -4,148 +4,522 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Isidro Cabrera · Asesoría de Crédito</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230B0F19'/><text x='50' y='68' font-size='55' text-anchor='middle' fill='%232ECC71' font-family='Arial' font-weight='bold'>IC</text></svg>">
     <meta property="og:title" content="Isidro Cabrera · Asesoría de Crédito">
-    <meta property="og:description" content="Evaluación gratuita en 2 minutos. Todos los perfiles. Sin compromiso.">
+    <meta property="og:description" content="Evaluá tu crédito en 2 minutos, sin compromiso.">
     <meta property="og:image" content="https://isidrocabrera2016-ui.github.io/simulador-online/1000318336.png">
-    <meta property="og:url" content="https://tking-asesor.github.io/tk/">
+    <meta property="og:url" content="https://isidrocabrera2016-ui.github.io/simulador-online/">
     <meta property="og:type" content="website">
-    <meta property="og:locale" content="es_PY">
     <style>
         :root {
             --bg-deep: #0B0F19; --accent-gold: #2ECC71; --white: #ffffff;
+            --grey-soft: #f5f6fa; --grey-border: #e2e6ed; --text-main: #1a1f2e;
             --whatsapp: #25D366;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--bg-deep);
-            min-height: 100vh; padding: 15px;
-            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 10px; display: flex; justify-content: center; align-items: flex-start; overflow-x: hidden;
         }
-        .card {
-            background: rgba(255,255,255,0.02); border-radius: 25px; padding: 30px 20px;
-            max-width: 450px; width: 100%; text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        .container { width: 100%; max-width: 500px; z-index: 1; }
+        .app-card {
+            background: rgba(255,255,255,0.02); border-radius: 25px; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4); margin-bottom: 80px;
             backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.08);
-            color: white;
         }
-        .logo { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
-        .logo span { color: var(--accent-gold); }
-        .subtitle { font-size: 12px; opacity: 0.8; margin-bottom: 25px; }
-        h2 { font-size: 16px; margin-bottom: 20px; font-weight: 600; }
-        .btn-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 15px; }
-        .btn {
-            padding: 14px 24px; border-radius: 12px; font-size: 15px; font-weight: 700;
-            cursor: pointer; border: none; transition: 0.2s;
+        .header {
+            background: transparent; padding: 30px 20px; color: white; text-align: center;
+            border-bottom: 1px solid rgba(46, 204, 113, 0.4);
         }
-        .btn-si { background: #25D366; color: white; }
-        .btn-no { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.2); }
-        .btn-credito {
-            background: var(--whatsapp); color: white; padding: 16px 32px;
-            font-size: 18px; text-decoration: none; display: inline-block;
-            border-radius: 50px; animation: pulse 2s infinite;
+        .header .logo { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+        .header .logo span { color: var(--accent-gold); }
+        .header .subtitle { font-size: 13px; opacity: 0.9; margin-top: 4px; letter-spacing: 0.5px; }
+        .header .agent-info { margin-top: 15px; font-size: 11px; background: rgba(46, 204, 113, 0.1); display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 50px; border: 1px solid rgba(46, 204, 113, 0.2); }
+        .avatar-mini { width: 24px; height: 24px; border-radius: 50%; background: var(--accent-gold); display: flex; align-items: center; justify-content: center; color: var(--bg-deep); font-weight: 800; font-size: 12px; }
+
+        .content { padding: 20px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 10px; font-weight: 700; margin-bottom: 5px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.8px; }
+        label .required { color: #e53935; }
+
+        input, select, textarea {
+            width: 100%; padding: 14px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            font-size: 14px; background: rgba(255,255,255,0.05); color: var(--white);
+            transition: all 0.2s;
         }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.15); }
+        option { background: #1A1D2E; }
+
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 8px; letter-spacing: 0.5px; transition: all 0.2s; }
+        .btn-primary { background: rgba(46, 204, 113, 0.15); color: var(--accent-gold); border: 1px solid rgba(46, 204, 113, 0.3); }
+        .btn-primary:hover { background: rgba(46, 204, 113, 0.25); }
+        .btn-back { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.7); }
+        .btn-whatsapp { background: var(--whatsapp); color: white; animation: pulse 2s infinite; }
+
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
             70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
             100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
         }
-        .declaracion-box {
-            background: rgba(46, 204, 113, 0.05); border: 1px solid rgba(46, 204, 113, 0.3);
-            border-radius: 12px; padding: 18px; margin-bottom: 20px; text-align: left;
-            font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5;
-        }
-        .declaracion-box label {
-            display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
-            font-size: 12px; margin-top: 15px; color: rgba(255,255,255,0.7);
-        }
-        .declaracion-box input[type="checkbox"] {
-            width: 20px; height: 20px; accent-color: var(--accent-gold); flex-shrink: 0; margin-top: 2px;
-        }
-        .oculto { display: none; }
-        .msg-final { font-size: 14px; opacity: 0.8; margin-top: 20px; }
-        .btn-continuar {
-            background: rgba(46, 204, 113, 0.15); color: var(--accent-gold);
-            border: 1px solid rgba(46, 204, 113, 0.3); padding: 14px 24px;
-            border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;
-            margin-top: 15px; width: 100%;
-        }
-        .btn-continuar:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .checklist-container { background: rgba(255,255,255,0.02); border-radius: 12px; padding: 15px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.08); }
+        .checklist-title { font-weight: 700; font-size: 12px; color: var(--accent-gold); margin-bottom: 12px; text-align: center; }
+        .checklist-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 12px; color: rgba(255,255,255,0.8); cursor: pointer; }
+        .checklist-item:last-child { border-bottom: none; } .checklist-item input[type="checkbox"] { display: none; }
+        .custom-check { width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.3); border-radius: 4px; display: flex; align-items: center; justify-content: center; background: transparent; }
+        .checklist-item input:checked + .custom-check { background: var(--accent-gold); border-color: var(--accent-gold); }
+        .custom-check::after { content: '✓'; color: var(--bg-deep); font-size: 14px; font-weight: 800; display: none; }
+        .checklist-item input:checked + .custom-check::after { display: block; }
+
+        .table-container { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-top: 15px; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 600px; }
+        th { background: rgba(46, 204, 113, 0.1); padding: 12px 6px; color: var(--accent-gold); font-size: 10px; letter-spacing: 0.5px; }
+        td { padding: 12px 6px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer; color: rgba(255,255,255,0.8); }
+        td.selected { background: var(--accent-gold); color: var(--bg-deep); font-weight: 800; }
+        .footer-note { font-size: 10px; text-align: center; color: rgba(255, 255, 255, 0.4); margin-top: 16px; }
+
+        .wa-float-btn { position: fixed; right: 15px; bottom: 25px; width: 55px; height: 55px; background: var(--whatsapp); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 998; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); animation: floatPulse 2s infinite; cursor: pointer; }
+        .wa-float-btn svg { width: 28px; height: 28px; fill: white; } .wa-float-text { font-size: 8px; color: white; font-weight: 700; margin-top: -2px; }
+        @keyframes floatPulse { 0% { box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); } 50% { box-shadow: 0 6px 30px rgba(37, 211, 102, 0.7); } 100% { box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); } }
+        .confirm-toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2e7d32; color: white; padding: 14px 28px; border-radius: 50px; font-weight: 700; font-size: 15px; z-index: 1001; box-shadow: 0 8px 20px rgba(0,0,0,0.3); display: none; }
+        .doc-reminder { background: rgba(46, 204, 113, 0.05); border: 1px solid rgba(46, 204, 113, 0.3); border-radius: 10px; padding: 10px; margin-top: 8px; font-size: 11px; color: var(--accent-gold); text-align: center; }
+        .progress-bar { display: flex; margin-bottom: 20px; }
+        .progress-step { flex: 1; text-align: center; font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3); padding-bottom: 8px; border-bottom: 3px solid rgba(255,255,255,0.1); }
+        .progress-step.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+        .step-content { display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .security-badge { display: flex; align-items: center; gap: 8px; background: rgba(46, 204, 113, 0.05); border: 1px solid rgba(46, 204, 113, 0.2); border-radius: 8px; padding: 10px 14px; margin: 15px 0; font-size: 11px; color: var(--accent-gold); font-weight: 600; }
+        .social-proof { text-align: center; font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 10px; }
+        .bloqueo-msg { background: rgba(46, 204, 113, 0.03); border: 1px solid rgba(46, 204, 113, 0.2); border-radius: 12px; padding: 20px; text-align: center; color: var(--accent-gold); font-weight: 600; }
+        .auth-container { background: rgba(46, 204, 113, 0.02); border: 1px solid rgba(46, 204, 113, 0.3); border-radius: 12px; padding: 20px; margin-top: 20px; }
+        .auth-container label { font-size: 12px; text-transform: none; letter-spacing: 0; display: flex; align-items: flex-start; gap: 8px; color: rgba(255,255,255,0.7); }
+        .auth-container input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--accent-gold); flex-shrink: 0; margin-top: 2px; }
+
+        .intentos-restantes { font-size: 10px; color: var(--accent-gold); text-align: right; margin-top: 4px; }
     </style>
 </head>
 <body>
+    <div class="wa-float-btn" id="waBtnFlotante" onclick="abrirWhatsAppDirecto()"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><span class="wa-float-text">Consultar</span></div>
+    <div class="confirm-toast" id="confirmToast">✅ ¡Solicitud enviada!</div>
 
-    <div class="card" id="pregunta1Container">
-        <div class="logo">ISIDRO <span>CABRERA</span></div>
-        <div class="subtitle">Asesoría de Crédito</div>
-        <h2>¿Tenés deudas o sanciones pendientes en Informconf?</h2>
-        <div class="btn-group">
-            <button class="btn btn-si" onclick="respuestaP1('si')">SÍ, TENGO</button>
-            <button class="btn btn-no" onclick="respuestaP1('no')">NO, ESTOY LIMPIO</button>
+    <div class="container">
+        <div class="app-card">
+            <div class="header">
+                <div class="logo">ISIDRO <span>CABRERA</span></div>
+                <div class="subtitle">Asesoría de Crédito</div>
+                <div class="agent-info">
+                    <div class="avatar-mini">IC</div>
+                    0992 271 485 · tking.asesor@gmail.com
+                </div>
+            </div>
+            <div class="content" id="mainContent">
+                <p style="text-align:center;font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:15px;">Simulá el valor de tus cuotas mensuales.</p>
+                <div class="form-group"><label>Monto a Simular</label><select id="montoSimulador"><option value="">Seleccioná...</option></select></div>
+                <div class="table-container" id="tablaContainer" style="display:none;"><table><thead><tr><th>6 cuotas</th><th>8 cuotas</th><th>10 cuotas</th><th>12 cuotas</th><th>15 cuotas</th><th>18 cuotas</th><th>20 cuotas</th><th>24 cuotas</th></tr></thead><tbody id="tablaSimulador"></tbody></table></div>
+                <p style="font-size:9px;color:rgba(255,255,255,0.3);text-align:center;margin-top:5px;">Cuotas de referencia. Sujeto a evaluación crediticia.</p>
+                <div id="simResultado" style="display:none; text-align:center; margin-top:20px;">
+                    <div style="font-size:28px;font-weight:800;color:var(--accent-gold);" id="cuotaMostrada">0 Gs</div>
+                    <p style="font-size:13px;color:rgba(255,255,255,0.5);" id="detalleMostrado"></p>
+                    <button class="btn btn-whatsapp" id="btnQuieroCalificar" onclick="mostrarAutorizacion()">💰 QUIERO SABER SI CALIFICO</button>
+                </div>
+
+                <div id="autorizacionContainer" style="display:none;">
+                    <div class="auth-container">
+                        <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
+                            <input type="checkbox" id="autorizacionCheck" required>
+                            <span>Declaro que voluntariamente estoy brindando mis datos personales. De ser necesaria, autorizo la verificación en centrales de riesgo crediticio. Soy responsable de la veracidad de la información proporcionada.</span>
+                        </label>
+                        <button type="button" class="btn btn-primary" onclick="confirmarAutorizacion()" style="margin-top:15px;">CONTINUAR CON LA SOLICITUD</button>
+                    </div>
+                </div>
+
+                <div id="formularioContainer" style="display:none;">
+                    <div class="progress-bar">
+                        <div class="progress-step active" id="paso1Bar">Paso 1: Datos</div>
+                        <div class="progress-step" id="paso2Bar">Paso 2: Perfil</div>
+                        <div class="progress-step" id="paso3Bar">Paso 3: Enviar</div>
+                    </div>
+                    <form id="formularioEvaluacion">
+                        <div class="step-content active" id="paso1">
+                            <div class="row-3">
+                                <div class="form-group"><label>Nombre Completo <span class="required">*</span></label><input type="text" id="nombreCliente" placeholder="Nombre y Apellido" required></div>
+                                <div class="form-group"><label>CI N.° <span class="required">*</span></label><input type="text" id="ciCliente" placeholder="1234567" inputmode="numeric" required><div id="ciIntentosRestantes" class="intentos-restantes"></div></div>
+                                <div class="form-group"><label>WhatsApp <span class="required">*</span></label><input type="tel" id="telefonoCliente" placeholder="0971..." required></div>
+                            </div>
+                            <div class="row-2">
+                                <div class="form-group"><label>Fecha de Nac. <span class="required">*</span></label><input type="date" id="fechaNacimiento" required></div>
+                                <div class="form-group"><label>Ciudad <span class="required">*</span></label><input type="text" id="ciudadCliente" placeholder="PJC, Asunción, CDE..." required></div>
+                            </div>
+                            <div class="form-group"><label>Ingreso Mensual (Gs) <span class="required">*</span></label><input type="text" id="ingresoMensual" placeholder="Mínimo 1.750.000" required></div>
+                            <button type="button" class="btn btn-primary" id="btnPaso1Siguiente" onclick="siguientePaso(2)">SIGUIENTE</button>
+                        </div>
+                        <div class="step-content" id="paso2">
+                            <div class="form-group"><label>Perfil Laboral <span class="required">*</span></label><select id="perfil" required onchange="actualizarSecciones()"><option value="">Seleccioná...</option><option value="formal_ips">Trabajador Formal (con IPS)</option><option value="formal_iva">Trabajador Formal (con IVA)</option><option value="informal">Trabajador Informal (sin IPS)</option><option value="publico_permanente">Funcionario Público Permanente</option><option value="publico_contratado">Funcionario Público Contratado</option><option value="micro_iva">Microempresa con IVA</option><option value="micro_patente">Microempresa con Patente</option><option value="micro_sin_patente">Microempresa sin Patente</option><option value="prof_independiente">Profesional Independiente (graduados universitarios)</option></select></div>
+                            <div class="checklist-container" id="checklistContainer" style="display:none;"><div class="checklist-title">Requisitos indispensables - Marcá los documentos que TENÉS:</div><div id="checklistItems"></div><div class="doc-reminder">📄 Para continuar con su evaluación, envíe los documentos solicitados por WhatsApp.</div></div>
+                            <div id="direccionParticularContainer" class="form-group" style="margin-top:15px;">
+                                <label style="color: rgba(255,255,255,0.6); margin-bottom:10px;">DIRECCIÓN PARTICULAR</label>
+                                <div class="form-group"><label>Calle <span class="required">*</span></label><input type="text" id="direccionCalle" placeholder="Calle" required></div>
+                                <div class="row-2">
+                                    <div class="form-group"><label>Número <span class="required">*</span></label><input type="text" id="direccionNumero" placeholder="Número" required></div>
+                                    <div class="form-group"><label>Barrio <span class="required">*</span></label><input type="text" id="direccionBarrio" placeholder="Barrio" required></div>
+                                </div>
+                                <div class="doc-reminder" style="margin-top:10px;">📍 Recuerde enviar su ubicación exacta por WhatsApp para completar la solicitud.</div>
+                            </div>
+                            <div id="direccionEmpresaContainer" style="display:none; margin-top:15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top:15px;">
+                                <label style="color: rgba(255,255,255,0.6); margin-bottom:10px;">DIRECCIÓN DE LA EMPRESA</label>
+                                <div class="form-group"><label>Calle <span class="required">*</span></label><input type="text" id="direccionEmpresaCalle" placeholder="Calle" required></div>
+                                <div class="row-2">
+                                    <div class="form-group"><label>Número <span class="required">*</span></label><input type="text" id="direccionEmpresaNumero" placeholder="Número" required></div>
+                                    <div class="form-group"><label>Barrio <span class="required">*</span></label><input type="text" id="direccionEmpresaBarrio" placeholder="Barrio" required></div>
+                                </div>
+                                <div class="doc-reminder" style="margin-top:10px;">📍 Recuerde enviar la ubicación exacta de la empresa por WhatsApp.</div>
+                            </div>
+                            <div class="campos-extras-container" id="camposExtrasContainer" style="display:none; margin-top: 15px;"><div id="camposExtrasFields"></div></div>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="btn btn-back" onclick="pasoAtras(1)">ATRÁS</button>
+                                <button type="button" class="btn btn-primary" onclick="siguientePaso(3)">SIGUIENTE</button>
+                            </div>
+                        </div>
+                        <div class="step-content" id="paso3">
+                            <div class="form-group"><label>Ref. 1 (Familiar) <span class="required">*</span></label><input type="text" id="ref1" placeholder="Nombre, Apellido y Celular" required></div>
+                            <div class="form-group"><label>Ref. 2 (Personal) <span class="required">*</span></label><input type="text" id="ref2" placeholder="Nombre, Apellido y Celular" required></div>
+                            <div class="form-group"><label>Ref. 3 (Personal) <span class="required">*</span></label><input type="text" id="ref3" placeholder="Nombre, Apellido y Celular" required></div>
+                            <div class="form-group"><label>Observaciones generales <span class="required">*</span></label><textarea id="observaciones" placeholder="Aclare cualquier detalle relevante o documento faltante..." required></textarea></div>
+                            <div class="security-badge">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#2ECC71"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+                                Evaluación 100% Segura y Confidencial
+                            </div>
+                            <div class="doc-reminder" style="margin-bottom:15px;">
+                                📎 <strong>Recordatorio:</strong> Para continuar con su evaluación, envíe los documentos solicitados por WhatsApp.
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="button" class="btn btn-back" onclick="pasoAtras(2)">ATRÁS</button>
+                                <button type="submit" class="btn btn-whatsapp" id="btnEnviar">ENVIAR SOLICITUD POR WHATSAPP</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div class="card oculto" id="pregunta2Container">
-        <h2>📝 Declaración Jurada</h2>
-        <div class="declaracion-box">
-            <p>Declaro bajo fe de juramento que no mantengo operaciones morosas con entidades comerciales ni financieras, ni poseo carteras de crédito vendidas (CARSA, NEXO, GECO, SIGESA, etc.).</p>
-            <label>
-                <input type="checkbox" id="declaracionCheck">
-                <span>Entiendo y acepto esta declaración. Deseo continuar.</span>
-            </label>
-        </div>
-        <button class="btn-continuar" id="btnDeclaracion" disabled onclick="confirmarDeclaracion()">CONFIRMO MI DECLARACIÓN</button>
-    </div>
-
-    <div class="card oculto" id="pregunta3Container">
-        <h2>¿Contás con un local físico o lugar de trabajo verificable?</h2>
-        <div class="btn-group">
-            <button class="btn btn-si" onclick="respuestaP3('si')">SÍ, CUENTO CON LUGAR VERIFICABLE</button>
-            <button class="btn btn-no" onclick="respuestaP3('no')">NO, NO CUENTO</button>
-        </div>
-    </div>
-
-    <div class="card oculto" id="finalExitoso">
-        <h2>✅ ¡Cumplís con los requisitos básicos!</h2>
-        <p style="margin-bottom:25px; opacity:0.8;">Accedé al simulador gratuito para conocer tu cuota y evaluar tu caso.</p>
-        <a href="https://isidrocabrera2016-ui.github.io/simulador-online/?v=2.0" class="btn-credito">💰 QUIERO MI CRÉDITO</a>
-    </div>
-
-    <div class="card oculto" id="finalNoCumple">
-        <h2>😔 Gracias por tu interés</h2>
-        <p class="msg-final">Lamentablemente, no cumplís con los requisitos mínimos en este momento. Cuando tu situación cambie, volvé a intentarlo.</p>
+        <p class="footer-note">Isidro Cabrera · Asesoría de Crédito · tking.asesor@gmail.com</p>
     </div>
 
     <script>
-        const declCheck = document.getElementById('declaracionCheck');
-        const btnDeclaracion = document.getElementById('btnDeclaracion');
+        const URL_GOOGLE_SHEETS = "https://script.google.com/macros/s/AKfycbx3wp7orHQQ_TCjQ7BzoHhe7MqfLEL6g4ZwKISnhcbna6fdiNfB2l2bNDR9M2gOpd6J/exec";
+        const NUMERO_WHATSAPP = "595992271485";
 
-        declCheck.addEventListener('change', function() {
-            btnDeclaracion.disabled = !this.checked;
+        const PERFILES = {
+            formal_ips: { antiguedad: '6 meses de aportes IPS', requisitos: ["Antigüedad: 6 meses de aportes IPS", "Liquidación de salario"], ubicaciones: [], camposExtra: [] },
+            formal_iva: {
+                antiguedad: '6 meses con IVAs',
+                requisitos: ["Antigüedad: 6 meses con IVAs", "6 últimos IVAs", "6 facturas emitidas a la empresa"],
+                ubicaciones: [],
+                camposExtra: [
+                    { label: "Razón social o nombre de la empresa", placeholder: "Ej: Empresa XYZ S.A." },
+                    { label: "Teléfono de la empresa", placeholder: "Ej: 021 123 456" }
+                ]
+            },
+            informal: { antiguedad: '6 meses como mínimo', requisitos: ["Antigüedad: 6 meses como mínimo", "Certificado de trabajo o RUC laboral"], ubicaciones: [], camposExtra: [] },
+            publico_permanente: { antiguedad: '1 mes (permanente)', requisitos: ["Antigüedad: 1 mes (permanente)"], ubicaciones: [], camposExtra: [] },
+            publico_contratado: { antiguedad: '15 meses (contratado)', requisitos: ["Antigüedad: 15 meses (contratado)"], ubicaciones: [], camposExtra: [] },
+            micro_iva: { antiguedad: '18 meses con IVAs', requisitos: ["Antigüedad: 18 meses con IVAs", "6 últimos IVAs", "Fotos del negocio (local y fachada)"], ubicaciones: [], camposExtra: [] },
+            micro_patente: { antiguedad: '18 meses con Patente', requisitos: ["Antigüedad: 18 meses con Patente", "6 últimos IVAs", "Patente actual", "Fotos del negocio", "Fotos de mercaderías"], ubicaciones: [], camposExtra: [] },
+            micro_sin_patente: { antiguedad: '24 meses demostrables', requisitos: ["Antigüedad: 24 meses demostrables", "Fotos del negocio (fachada e interior)", "Fotos de las mercaderías"], ubicaciones: [], camposExtra: [] },
+            prof_independiente: { antiguedad: '12 meses con RUC y título', requisitos: ["Antigüedad: 12 meses con RUC y título", "6 últimos IVAs", "Título o Registro", "Facturas (6 meses)"], ubicaciones: [], camposExtra: [] }
+        };
+
+        const CUOTERO = {
+            1000000: [235000,182000,150000,127000,112000,101000,96000,90000],
+            2000000: [465000,358000,292500,254000,223000,201000,191000,177000],
+            3000000: [685000,535000,435000,380000,334000,302000,287000,266000],
+            4000000: [900000,700000,571000,507000,445000,402000,382000,354000],
+            5000000: [1150000,885000,712000,633000,555000,503000,478000,443000]
+        };
+        const PLAZOS = [6,8,10,12,15,18,20,24];
+
+        let cuotaSeleccionada = null;
+
+        function formatearNumero(n) { return n ? n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,".") : "0"; }
+        function parsearNumero(s) { return parseInt(s.toString().replace(/\./g,'')) || 0; }
+
+        function getEnvioCount(ci) {
+            const envios = JSON.parse(localStorage.getItem('ic_envios_ci')) || {};
+            const key = ci.replace(/\D/g, '');
+            const entry = envios[key];
+            if (entry) { const hoy = new Date().toDateString(); if (entry.fecha !== hoy) return 0; return entry.contador; }
+            return 0;
+        }
+        function registrarEnvio(ci) {
+            const envios = JSON.parse(localStorage.getItem('ic_envios_ci')) || {};
+            const key = ci.replace(/\D/g, '');
+            envios[key] = { fecha: new Date().toDateString(), contador: getEnvioCount(ci) + 1 };
+            localStorage.setItem('ic_envios_ci', JSON.stringify(envios));
+        }
+        function actualizarIntentosUI() {
+            const ci = document.getElementById('ciCliente').value;
+            const count = getEnvioCount(ci);
+            const restantes = Math.max(0, 2 - count);
+            const el = document.getElementById('ciIntentosRestantes');
+            if (ci.trim() !== "") {
+                el.textContent = 'Te quedan ' + restantes + ' envío(s) hoy.';
+                if (restantes <= 0) { document.getElementById('btnPaso1Siguiente').disabled = true; alert("Ya completaste los 2 envíos disponibles por hoy para este CI. Vuelva mañana o consulte por otra vía."); }
+                else { document.getElementById('btnPaso1Siguiente').disabled = false; }
+            } else { el.textContent = ''; }
+        }
+        document.getElementById('ciCliente').addEventListener('input', actualizarIntentosUI);
+
+        const montoSimSelect = document.getElementById('montoSimulador');
+        const tablaContainer = document.getElementById('tablaContainer');
+        const montos = [1000000,2000000,3000000,4000000,5000000];
+        montos.forEach(val => { const opt = document.createElement('option'); opt.value = val; opt.text = formatearNumero(val) + " Gs"; montoSimSelect.appendChild(opt); });
+
+        montoSimSelect.addEventListener('change', function() {
+            const m = parseInt(this.value);
+            if (!m) { tablaContainer.style.display = 'none'; document.getElementById('simResultado').style.display = 'none'; return; }
+            tablaContainer.style.display = 'block';
+            const cuotas = CUOTERO[m];
+            const tbody = document.getElementById('tablaSimulador');
+            let html = "<tr>";
+            for (let i = 0; i < 8; i++) html += `<td onclick="seleccionarCuota(this,${m},${PLAZOS[i]},${cuotas[i]})" style="cursor:pointer;">${cuotas[i] > 0 ? formatearNumero(cuotas[i]) : '-'}</td>`;
+            html += "</tr>"; tbody.innerHTML = html;
+            document.getElementById('simResultado').style.display = 'none';
+            cuotaSeleccionada = null;
         });
 
-        function respuestaP1(respuesta) {
-            document.getElementById('pregunta1Container').classList.add('oculto');
-            if (respuesta === 'si') {
-                document.getElementById('finalNoCumple').classList.remove('oculto');
-            } else {
-                document.getElementById('pregunta2Container').classList.remove('oculto');
-            }
+        window.seleccionarCuota = function(el, monto, plazo, cuota) {
+            if (cuota <= 0) return;
+            document.querySelectorAll('#tablaSimulador td').forEach(td => td.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('cuotaMostrada').textContent = formatearNumero(cuota) + " Gs";
+            document.getElementById('detalleMostrado').textContent = `${plazo} cuotas de ${formatearNumero(cuota)} Gs por mes`;
+            document.getElementById('simResultado').style.display = 'block';
+            cuotaSeleccionada = { monto, plazo, cuota };
+        };
+
+        function mostrarAutorizacion() {
+            if (sessionStorage.getItem('bloqueado')) { alert("Acceso denegado."); return; }
+            document.getElementById('btnQuieroCalificar').style.display = 'none';
+            document.getElementById('autorizacionContainer').style.display = 'block';
+            document.getElementById('autorizacionContainer').scrollIntoView({behavior:'smooth'});
+        }
+        function confirmarAutorizacion() {
+            if (!document.getElementById('autorizacionCheck').checked) { alert("Debe autorizar el uso de sus datos para continuar."); return; }
+            document.getElementById('autorizacionContainer').style.display = 'none';
+            document.getElementById('formularioContainer').style.display = 'block';
+            document.getElementById('formularioContainer').scrollIntoView({behavior:'smooth'});
+            irPaso(1);
         }
 
-        function confirmarDeclaracion() {
-            if (!declCheck.checked) return;
-            document.getElementById('pregunta2Container').classList.add('oculto');
-            document.getElementById('pregunta3Container').classList.remove('oculto');
+        function irPaso(n) {
+            document.querySelectorAll('.step-content,.progress-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('paso'+n).classList.add('active');
+            document.getElementById('paso'+n+'Bar').classList.add('active');
+        }
+        function pasoAtras(n) { irPaso(n); }
+
+        function validarPaso1() {
+            const fecha = document.getElementById('fechaNacimiento').value;
+            if (!fecha) { alert("Ingrese su fecha de nacimiento."); return false; }
+            const hoy = new Date(); const nac = new Date(fecha);
+            let edad = hoy.getFullYear() - nac.getFullYear();
+            const mes = hoy.getMonth() - nac.getMonth();
+            if (mes < 0 || (mes === 0 && hoy.getDate() < nac.getDate())) edad--;
+            if (edad < 18 || edad > 70) { alert("La edad debe estar entre 18 y 70 años."); return false; }
+            const nombre = document.getElementById('nombreCliente').value.trim();
+            if (!nombre || nombre.split(' ').length < 2) { alert("Debe ingresar su Nombre y Apellido completos."); return false; }
+            const ci = document.getElementById('ciCliente').value.trim();
+            const telefono = document.getElementById('telefonoCliente').value.trim();
+            const ciudad = document.getElementById('ciudadCliente').value.trim();
+            const ingresoRaw = document.getElementById('ingresoMensual').value.trim();
+            if (!ci || !telefono || !ciudad || !ingresoRaw) { alert("Completá todos los datos del Paso 1."); return false; }
+            const ingreso = parsearNumero(ingresoRaw);
+            if (ingreso < 1750000) { alert("El ingreso mínimo es Gs. 1.750.000."); return false; }
+            const enviosRestantes = 2 - getEnvioCount(ci);
+            if (enviosRestantes <= 0) { alert("Ya completaste los 2 envíos disponibles por hoy para este CI. Vuelva mañana o consulte por otra vía."); return false; }
+            return true;
+        }
+        function validarPaso2() {
+            const perfil = document.getElementById('perfil').value;
+            if (!perfil) { alert("Seleccioná tu perfil laboral."); return false; }
+            const calle = document.getElementById('direccionCalle').value.trim();
+            const numero = document.getElementById('direccionNumero').value.trim();
+            const barrio = document.getElementById('direccionBarrio').value.trim();
+            if (!calle || !numero || !barrio) { alert("Completá la dirección particular (Calle, Número y Barrio)."); return false; }
+            if (perfil === 'formal_iva') {
+                const empresaCalle = document.getElementById('direccionEmpresaCalle').value.trim();
+                const empresaNumero = document.getElementById('direccionEmpresaNumero').value.trim();
+                const empresaBarrio = document.getElementById('direccionEmpresaBarrio').value.trim();
+                if (!empresaCalle || !empresaNumero || !empresaBarrio) { alert("Completá la dirección de la empresa (Calle, Número y Barrio)."); return false; }
+            }
+            if (PERFILES[perfil].camposExtra && PERFILES[perfil].camposExtra.length > 0) {
+                const extras = document.querySelectorAll('.campo-extra');
+                for (let inp of extras) { if (!inp.value.trim()) { alert("Completá todos los campos de la empresa."); return false; } }
+            }
+            const checks = document.querySelectorAll('#checklistItems input[type="checkbox"]');
+            let algunoMarcado = false;
+            checks.forEach(ch => { if (ch.checked) algunoMarcado = true; });
+            if (PERFILES[perfil].requisitos.length > 0 && !algunoMarcado) {
+                alert("Debe marcar al menos uno de los requisitos indispensables del perfil seleccionado.");
+                return false;
+            }
+            return true;
+        }
+        function validarReferencia(ref) {
+            if (!ref || ref.trim() === "") return false;
+            const partes = ref.split(' ');
+            return partes.length >= 3;
+        }
+        function validarPaso3() {
+            const ref1 = document.getElementById('ref1').value.trim();
+            const ref2 = document.getElementById('ref2').value.trim();
+            const ref3 = document.getElementById('ref3').value.trim();
+            const obs = document.getElementById('observaciones').value.trim();
+            if (!ref1 || !ref2 || !ref3 || !obs) { alert("Completá todos los campos del Paso 3."); return false; }
+            if (!validarReferencia(ref1)) { alert("La Referencia 1 debe contener Nombre, Apellido y Celular."); return false; }
+            if (!validarReferencia(ref2)) { alert("La Referencia 2 debe contener Nombre, Apellido y Celular."); return false; }
+            if (!validarReferencia(ref3)) { alert("La Referencia 3 debe contener Nombre, Apellido y Celular."); return false; }
+            return true;
+        }
+        function siguientePaso(n) {
+            if (sessionStorage.getItem('bloqueado')) return;
+            if (n === 2 && !validarPaso1()) return;
+            if (n === 3 && !validarPaso2()) return;
+            irPaso(n);
         }
 
-        function respuestaP3(respuesta) {
-            document.getElementById('pregunta3Container').classList.add('oculto');
-            if (respuesta === 'si') {
-                document.getElementById('finalExitoso').classList.remove('oculto');
-            } else {
-                document.getElementById('finalNoCumple').classList.remove('oculto');
+        function actualizarSecciones() {
+            const perfil = document.getElementById('perfil').value;
+            document.getElementById('checklistContainer').style.display = perfil ? 'block' : 'none';
+            document.getElementById('camposExtrasContainer').style.display = perfil ? 'block' : 'none';
+            document.getElementById('direccionEmpresaContainer').style.display = perfil === 'formal_iva' ? 'block' : 'none';
+            
+            if (!perfil) return;
+            const datos = PERFILES[perfil];
+            let html = ''; datos.requisitos.forEach((req, i) => html += `<div class="checklist-item" onclick="toggleCheck(this)"><input type="checkbox" id="check_${i}" value="${req}"><div class="custom-check"></div><label class="checklist-label">${req}</label></div>`); document.getElementById('checklistItems').innerHTML = html;
+            html = ''; 
+            if (datos.camposExtra && datos.camposExtra.length > 0) {
+                document.getElementById('camposExtrasContainer').style.display = 'block';
+                datos.camposExtra.forEach((campo, i) => html += `<div class="form-group"><label>${campo.label} <span class="required">*</span></label><input type="text" class="campo-extra" placeholder="${campo.placeholder}" required></div>`);
+            } else { document.getElementById('camposExtrasContainer').style.display = 'none'; }
+            document.getElementById('camposExtrasFields').innerHTML = html;
+        }
+        function toggleCheck(item) { const cb = item.querySelector('input[type="checkbox"]'); cb.checked = !cb.checked; }
+
+        function abrirWhatsAppDirecto() {
+            if (sessionStorage.getItem('bloqueado')) return;
+            window.open("https://wa.me/"+NUMERO_WHATSAPP+"?text="+encodeURIComponent("Hola Isidro! Vi tu plataforma y quisiera recibir atención personalizada."),"_blank");
+        }
+
+        document.getElementById('formularioEvaluacion').addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (sessionStorage.getItem('bloqueado') || !validarPaso3()) return;
+
+            const nombre = document.getElementById('nombreCliente').value.trim();
+            const ci = document.getElementById('ciCliente').value.trim();
+            const telefono = document.getElementById('telefonoCliente').value.trim();
+            const fechaNac = document.getElementById('fechaNacimiento').value;
+            const ciudad = document.getElementById('ciudadCliente').value.trim();
+            const ingreso = parsearNumero(document.getElementById('ingresoMensual').value);
+            const perfil = document.getElementById('perfil').value;
+            const monto = parsearNumero(montoSimSelect.value);
+            const observaciones = document.getElementById('observaciones').value.trim();
+            const ref1 = document.getElementById('ref1').value.trim();
+            const ref2 = document.getElementById('ref2').value.trim();
+            const ref3 = document.getElementById('ref3').value.trim();
+            const calle = document.getElementById('direccionCalle').value.trim();
+            const numero = document.getElementById('direccionNumero').value.trim();
+            const barrio = document.getElementById('direccionBarrio').value.trim();
+            let empresaCalle = '', empresaNumero = '', empresaBarrio = '';
+            if (perfil === 'formal_iva') {
+                empresaCalle = document.getElementById('direccionEmpresaCalle').value.trim();
+                empresaNumero = document.getElementById('direccionEmpresaNumero').value.trim();
+                empresaBarrio = document.getElementById('direccionEmpresaBarrio').value.trim();
             }
+            if (!cuotaSeleccionada) { alert("Seleccioná una cuota en el simulador."); return; }
+
+            const enviosRestantes = 2 - getEnvioCount(ci);
+            if (enviosRestantes <= 0) { alert("Ya completaste los 2 envíos disponibles por hoy para este CI. Vuelva mañana o consulte por otra vía."); return; }
+
+            const hoy = new Date(); const nac = new Date(fechaNac);
+            let edad = hoy.getFullYear() - nac.getFullYear();
+            const mes = hoy.getMonth() - nac.getMonth();
+            if (mes < 0 || (mes === 0 && hoy.getDate() < nac.getDate())) edad--;
+
+            const perfilLabel = document.getElementById('perfil').options[document.getElementById('perfil').selectedIndex].text;
+            const checks = document.querySelectorAll('#checklistItems input[type="checkbox"]');
+            let tiene = [], falta = [];
+            checks.forEach(ch => { if (ch.checked) tiene.push(ch.value); else falta.push(ch.value); });
+            
+            let razon_social = '', tel_empresa = '';
+            const extras = document.querySelectorAll('.campo-extra');
+            if (extras.length > 0) {
+                razon_social = extras[0]?.value.trim() || '';
+                tel_empresa = extras[1]?.value.trim() || '';
+            }
+
+            const checklistMsg = (tiene.length > 0 ? 'TIENE:\n' + tiene.map(i => '  * ' + i).join('\n') : '') + (falta.length > 0 ? '\nFALTA:\n' + falta.map(i => '  * ' + i).join('\n') : '');
+            let direccionMsg = `Dirección particular: ${calle} ${numero}, Barrio ${barrio}`;
+            if (perfil === 'formal_iva') {
+                direccionMsg += `\nDirección de la empresa: ${empresaCalle} ${empresaNumero}, Barrio ${empresaBarrio}`;
+            }
+            const cuotaMsg = `Cuota de interés: ${cuotaSeleccionada.plazo} cuotas de Gs. ${formatearNumero(cuotaSeleccionada.cuota)}`;
+            
+            const mensajeWa = `Hola Isidro! Soy ${nombre}, completé tu formulario de crédito.\n\n` +
+                `CI: ${ci}\nEdad: ${edad} años\nWhatsApp: ${telefono}\nCiudad: ${ciudad}\n` +
+                `Perfil: ${perfilLabel}\nMonto solicitado: Gs. ${formatearNumero(monto)}\nIngreso: Gs. ${formatearNumero(ingreso)}\n${cuotaMsg}\n\n` +
+                `DOCUMENTACIÓN:\n${checklistMsg}\n${direccionMsg}\nREFERENCIAS:\nRef1 (Familiar): ${ref1}\nRef2: ${ref2}\nRef3: ${ref3}\nOBSERVACIONES:\n${observaciones}\n` +
+                (razon_social ? `\nDATOS DE LA EMPRESA:\nRazón social: ${razon_social}\nTeléfono empresa: ${tel_empresa}\n` : '') +
+                `\n📎 Tengo los docs listos. ¿Qué sigue?`;
+
+            const datosSheet = {
+                nombre, ci, edad, telefono, ciudad, perfil: perfilLabel, monto, ingreso,
+                informconf: 'Sin Informconf',
+                checklist_tiene: tiene.join('; '), checklist_falta: falta.join('; '),
+                calle, numero, barrio,
+                referencias: `Ref1: ${ref1}, Ref2: ${ref2}, Ref3: ${ref3}`, observaciones, cuota: cuotaMsg,
+                razon_social: razon_social, tel_empresa: tel_empresa,
+                autorizacion: "Sí", fecha: new Date().toLocaleString()
+            };
+            
+            fetch(URL_GOOGLE_SHEETS, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(datosSheet) }).catch(err => console.log(err));
+            registrarEnvio(ci);
+
+            document.getElementById('confirmToast').style.display = 'block';
+            window.open("https://wa.me/"+NUMERO_WHATSAPP+"?text="+encodeURIComponent(mensajeWa),"_blank");
+            
+            setTimeout(() => {
+                document.getElementById('confirmToast').style.display = 'none';
+                window.location.reload();
+            }, 3000);
+        });
+
+        configurarInputNumerico('ciCliente'); configurarInputNumerico('ingresoMensual');
+        function configurarInputNumerico(id) {
+            const inp = document.getElementById(id); if (!inp) return;
+            inp.addEventListener('input', function() { let r = this.value.replace(/\D/g, ''); if (r !== '') this.value = formatearNumero(parseInt(r)); });
+            inp.addEventListener('blur', function() { let r = parsearNumero(this.value); if (r > 0) this.value = formatearNumero(r); else this.value = ''; });
+        }
+
+        const hoyFecha = new Date();
+        document.getElementById('fechaNacimiento').setAttribute('max', `${hoyFecha.getFullYear()-18}-12-31`);
+        document.getElementById('fechaNacimiento').setAttribute('min', `${hoyFecha.getFullYear()-70}-01-01`);
+
+        if (sessionStorage.getItem('bloqueado')) {
+            document.getElementById('infoconfBloqueo').style.display = 'block';
+            document.getElementById('btnPaso1Siguiente').style.display = 'none';
+            document.getElementById('waBtnFlotante').style.display = 'none';
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const perfilParam = urlParams.get('perfil');
+        if (perfilParam && PERFILES[perfilParam]) {
+            document.addEventListener('DOMContentLoaded', () => {
+                const perfilSelect = document.getElementById('perfil');
+                if (perfilSelect) { perfilSelect.value = perfilParam; actualizarSecciones(); }
+            });
         }
     </script>
 </body>
